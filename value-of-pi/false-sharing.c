@@ -1,7 +1,7 @@
 /*
 	Calculating the value of integral 0 to 1, 4/(1+x^2)
 
-	Cyclic distribution of loop iterations
+	Cyclic distribution of loop iterations(False Sharing)
 */
 #include "stdio.h"
 #include "omp.h"
@@ -23,6 +23,7 @@ double serial()
 	return pi;
 }
 
+// False Sharing 
 double parallel()
 {
 	int i, nthreads;
@@ -37,7 +38,7 @@ double parallel()
 		double x;
 		id = omp_get_thread_num();
 		nthrds = omp_get_num_threads();
-		//
+		
 		if(id == 0)
 		{
 			nthreads = nthrds;
@@ -67,7 +68,7 @@ int main()
 	double pi_serial = serial();
 	serial_end_time = omp_get_wtime();
 
-	// Parallel Code
+	// Parallel Code (False Sharing)
 	parallel_start_time = omp_get_wtime();
 	double pi_parallel = parallel();
 	parallel_end_time = omp_get_wtime();
